@@ -1,0 +1,54 @@
+********************** Parameters are input from console. They are assigned as values to the properties.
+
+Parameters:	
+	Name:	
+	Type:	
+	Default:	
+	Description:	
+	Allowed Values: -a -b -c	
+	NoEcho: true	
+	AllowedPattern:	
+	ConstraintDescription:	
+	MinLength:	
+	MaxLength:
+
+
+********************** Mappings are used to create maps of two property values which are linked together.
+
+Mappings: 
+  RegionMap: 
+    us-east-1: 
+      HVM64: ami-0ff8a91507f77f867
+      HVMG2: ami-0a584ac55a7631c0c
+
+
+********************** Condition is used to for conditional creation or configuration of resources.
+
+Conditions:
+   CreateBucket: !Not 
+     - !Equals 
+       - !Ref BucketName
+       - ''
+
+
+********************** Cloud resources.
+
+Resources:	
+   Name:
+      Type: AWS::
+      Condition: condition1
+      Properties:
+          Propname1: !Ref parameter. 
+          Propname2: !GetAtt otherresource.attribute
+          Propname3: { "Fn::FindInMap" : [ "RegionMap", { "Ref" : "AWS::Region" }, "HVM64"]},
+
+
+********************** Output are used in cross stack
+
+Outputs:
+   Name:
+     Description: Security Group ID of the newly created Security Group
+     Value:
+        Fn::GetAtt:
+          - Property1
+          - Property2
