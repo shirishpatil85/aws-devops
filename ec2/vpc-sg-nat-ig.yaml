@@ -101,20 +101,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
       - Key: Name
-        Value: !Ref "
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        StackName"
+        Value: !Ref "AWS::StackName"
 
   PublicSubnet1:
     Type: AWS::EC2::Subnet
