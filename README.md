@@ -1,7 +1,7 @@
 # aws-devops
 Projects using aws for devops
 
-## AWS Cloud Formation samples
+## AWS Cloud Formation sample templates
 
 https://github.com/aws-samples/startup-kit-templates
 
