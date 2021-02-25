@@ -46,9 +46,27 @@ Resources:
 ********************** Output are used in cross stack
 
 Outputs:
-   Name:
+   VPCId(Logical ID):
      Description: Security Group ID of the newly created Security Group
      Value:
         Fn::GetAtt:
           - Property1
           - Property2
+      Export:
+      	  Name: !Sub ${AWS::StackName}-VPCID
+      	
+
+---------- Intrinsic functions
+
+Parameter 		- Custom user defined values
+Pseudo 			- Values from current template
+Substitue function 	- Value of parameter or pseudo parameter
+Ref function 		- Value of parameter
+Import function 	- Exported output value from other stacks
+
+Properties:
+	Value: !Sub ${AWS::StackName}-Public-A
+	VpcId: !Ref VPC
+	Value: !Join ['', [!Ref "AWS::StackName", "-VPC" ]]
+	Value: Fn::ImportValue:
+  		!Sub "${NetworkStack}-SubnetID"
