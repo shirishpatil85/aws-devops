@@ -70,3 +70,25 @@ Properties:
 	Value: !Join ['', [!Ref "AWS::StackName", "-VPC" ]]
 	Value: Fn::ImportValue:
   		!Sub "${NetworkStack}-SubnetID"
+
+---------- IAM Policy 
+
+Effect:Allow
+Action:  ["Create/Modify/Delete/List/Desribe/Read/Write..", "ec2:*" , sts:AssumeRole]
+Principal: [arn of iam user , role , service ]  // Attached to resource
+Resource: ["arn:aws:s3:::conf-*" , s3:*]   // Attached to entity
+Condition: [aws: RequestedRegion”: “ap-south-1” ]
+
+# Tag based access
+
+aws:ResourceTag/key-name
+aws:RequestTag/key-name
+aws:PrincipalTag/key-name
+
+Condition:
+   StringEquals:
+   	aws:ResourceTag/project: "${aws:PrincipalTag/project}"
+	
+# sts:AssumeRole
+Use API along with these to access using sts obtained by calling - GetSessionToken API
+aws_access_key_id, aws_secret_access_key , session_token
