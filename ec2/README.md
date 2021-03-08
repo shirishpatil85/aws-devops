@@ -66,14 +66,12 @@ VPC
      ALB  
 		 
      EC2   
-			Launch config  
-				Subnets used should be public  
-				services  
-				userdata - scripts  
-					cfn - ec2 sends signal to ASG  
-			
-      Webserverscaleup/down policy  
-			
+	Launch config  
+	  Subnets used should be public  
+		services  
+		userdata - scripts  
+		   cfn - ec2 sends signal to ASG 			
+      Webserverscaleup/down policy  			
       CW -Alarm - policy  
 
 Imported - VPC, Subnets for ALB and LConfig for EC2  
