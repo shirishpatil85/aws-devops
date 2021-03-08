@@ -7,7 +7,6 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: SASKV5N Bastion
 
-
 Parameters:
 
   NetworkStackName:
@@ -250,7 +249,7 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       SubnetId:
-        Fn::ImportValue: !Sub "${NetworkStackName}-PublicSubnet1ID"
+        Fn::ImportValue: !Sub "${NetworkStackName}-ELBPublicSubnet1ID"
       GroupSet:
         - Fn::ImportValue: !Sub "${NetworkStackName}-BastionGroupID"
       SourceDestCheck: true
@@ -336,4 +335,3 @@ Outputs:
     Value: !GetAtt BastionEip.AllocationId
     Export:
       Name: !Sub "${AWS::StackName}-BastionEIP-AllocationId"
-
