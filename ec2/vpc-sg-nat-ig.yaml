@@ -103,27 +103,29 @@ Resources:
       - Key: Name
         Value: !Ref "AWS::StackName"
 
-  PublicSubnet1:
+  ELBPublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       CidrBlock: !FindInMap [ CIDRMap, Public1, CIDR ]
+      MapPublicIpOnLaunch: true
       AvailabilityZone: !Ref AvailabilityZone1
       Tags:
       - Key: Name
-        Value: !Sub "${AWS::StackName}-PublicSubnet1"
+        Value: !Sub "${AWS::StackName}-ELBPublicSubnet1"
 
-  PublicSubnet2:
+  ELBPublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       CidrBlock: !FindInMap [ CIDRMap, Public2, CIDR ]
+      MapPublicIpOnLaunch: true
       AvailabilityZone: !Ref AvailabilityZone2
       Tags:
       - Key: Name
-        Value: !Sub "${AWS::StackName}-PublicSubnet2"
+        Value: !Sub "${AWS::StackName}-ELBPublicSubnet2"
 
-  PrivateSubnet1:
+  DBPrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
@@ -131,9 +133,9 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone1
       Tags:
       - Key: Name
-        Value: !Sub "${AWS::StackName}-PrivateSubnet1"
+        Value: !Sub "${AWS::StackName}-DBPrivateSubnet1"
 
-  PrivateSubnet2:
+  DBPrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
@@ -141,10 +143,11 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone2
       Tags:
       - Key: Name
-        Value: !Sub "${AWS::StackName}-PrivateSubnet2"
+        Value: !Sub "${AWS::StackName}-DBPrivateSubnet2"
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
+    DependsOn: VPC
     Properties:
       Tags:
         - Key: Name
@@ -175,25 +178,25 @@ Resources:
   PublicSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref ELBPublicSubnet1
       RouteTableId: !Ref PublicRouteTable
 
   PublicSubnetRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: !Ref ELBPublicSubnet2
       RouteTableId: !Ref PublicRouteTable
 
   PublicSubnetNetworkAclAssociation1:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref ELBPublicSubnet1
       NetworkAclId: !GetAtt VPC.DefaultNetworkAcl
 
   PublicSubnetNetworkAclAssociation2:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: !Ref ELBPublicSubnet2
       NetworkAclId: !GetAtt VPC.DefaultNetworkAcl
 
   ELBSecurityGroup:
@@ -373,7 +376,7 @@ Resources:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatEIP1.AllocationId
-      SubnetId: !Ref PublicSubnet1
+      SubnetId: !Ref ELBPublicSubnet1
 
   NatGateway2:
     DependsOn: VPCGatewayAttachment
@@ -381,7 +384,7 @@ Resources:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatEIP2.AllocationId
-      SubnetId: !Ref PublicSubnet2
+      SubnetId: !Ref ELBPublicSubnet2
 
   NatEIP1:
     DependsOn: VPCGatewayAttachment
@@ -433,21 +436,21 @@ Resources:
   PrivateSubnetRouteTableAssociation1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      SubnetId: !Ref PrivateSubnet1
+      SubnetId: !Ref DBPrivateSubnet1
       RouteTableId: !Ref NatRouteTable1
 
   PrivateSubnetRouteTableAssociationSingleNatGateway:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Condition: CreateSingleNatGateway
     Properties:
-      SubnetId: !Ref PrivateSubnet2
+      SubnetId: !Ref DBPrivateSubnet2
       RouteTableId: !Ref NatRouteTable1
 
   PrivateSubnetRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Condition: CreateMultipleNatGateways
     Properties:
-      SubnetId: !Ref PrivateSubnet2
+      SubnetId: !Ref DBPrivateSubnet2
       RouteTableId: !Ref NatRouteTable2
 
 Outputs:
@@ -470,29 +473,29 @@ Outputs:
     Export:
       Name: !Sub "${AWS::StackName}-vpc-cidr"
 
-  PublicSubnet1:
+  ELBPublicSubnet1:
     Description: Public subnet 1 ID
-    Value: !Ref PublicSubnet1
+    Value: !Ref ELBPublicSubnet1
     Export:
-      Name: !Sub "${AWS::StackName}-PublicSubnet1ID"
+      Name: !Sub "${AWS::StackName}-ELBPublicSubnet1ID"
 
-  PublicSubnet2:
+  ELBPublicSubnet2:
     Description: Public subnet 2 ID
-    Value: !Ref PublicSubnet2
+    Value: !Ref ELBPublicSubnet2
     Export:
-      Name: !Sub "${AWS::StackName}-PublicSubnet2ID"
+      Name: !Sub "${AWS::StackName}-ELBPublicSubnet2ID"
 
-  PrivateSubnet1:
-    Description: Private subnet 1 ID
-    Value: !Ref PrivateSubnet1
+  DBPrivateSubnet1:
+    Description: DB Private subnet 1 ID
+    Value: !Ref DBPrivateSubnet1
     Export:
-      Name: !Sub "${AWS::StackName}-PrivateSubnet1ID"
+      Name: !Sub "${AWS::StackName}-DBPrivateSubnetID1"
 
-  PrivateSubnet2:
-    Description: Private subnet 2 ID
-    Value: !Ref PrivateSubnet2
+  DBPrivateSubnet2:
+    Description: DB Private subnet 2 ID
+    Value: !Ref DBPrivateSubnet2
     Export:
-      Name: !Sub "${AWS::StackName}-PrivateSubnet2ID"
+      Name: !Sub "${AWS::StackName}-DBPrivateSubnet2ID"
 
   ELBSecurityGroup:
     Description: Security group ID for Internet-facing ELB
