@@ -187,8 +187,8 @@ Resources:
     Properties:
       DBSubnetGroupDescription: Database subnet group
       SubnetIds:
-      - Fn::ImportValue: !Sub ${NetworkStackName}-PrivateSubnet1ID
-      - Fn::ImportValue: !Sub ${NetworkStackName}-PrivateSubnet2ID
+      - Fn::ImportValue: !Sub ${NetworkStackName}-DBPrivateSubnet1ID
+      - Fn::ImportValue: !Sub ${NetworkStackName}-DBPrivateSubnet2ID
       Tags:
       - Key: Name
         Value: !Ref AWS::StackName
@@ -204,8 +204,7 @@ Resources:
       DatabaseName: !Ref DatabaseName
       DBClusterParameterGroupName: !If [ IsAuroraMySQL,  default.aurora5.6, default.aurora-postgresql9.6 ]
       Port: !If [ IsAuroraMySQL,  3306, 5432 ]
-      VpcSecurityGroupIds:
-        - Fn::ImportValue: !Sub ${NetworkStackName}-DatabaseGroupID
+      VpcSecurityGroupIds: !Ref DatabaseSecurityGroup
     DependsOn: DatabaseSubnetGroup
 
   AuroraInstance0:
