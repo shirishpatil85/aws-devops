@@ -10,6 +10,12 @@ Description: >-
   and an Application Load Balancer. You will be billed for the AWS resources
   used if you create a stack from this template.
 Parameters:
+  NetworkStackName:
+    Description: Name of an active CloudFormation stack that contains networking resources
+    Type: String
+    MinLength: 1
+    MaxLength: 255
+    AllowedPattern: '^[a-zA-Z][-a-zA-Z0-9]*$'
   VpcId:
     Type: 'AWS::EC2::VPC::Id'
     Description: VpcId of your existing Virtual Private Cloud (VPC)
@@ -554,7 +560,8 @@ Resources:
           - !Ref InstanceType
           - Arch
       SecurityGroups:
-        - !Ref InstanceSecurityGroup
+        - !ImportValue 
+          'Fn::Sub': '${NetworkStackName}-AppSecurityGroupID'
       InstanceType: !Ref InstanceType
       UserData: !Base64 
         'Fn::Join':
@@ -579,6 +586,16 @@ Resources:
             - '         --resource WebServerGroup '
             - '         --region '
             - !Ref 'AWS::Region'
+            - |+
+
+            - |
+              mkdir /var/www/html /var/www/inc 
+            - |
+              aws s3 cp s3://ec2-project1/project.php /var/www/html 
+            - |
+              aws s3 cp s3://ec2-project1/dbinfo.inc /var/www/inc 
+            - |
+              find /var/www -type f -exec chmod 0664 {} + 
             - |+
 
   WebServerScaleUpPolicy:
@@ -631,6 +648,9 @@ Resources:
     Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
     Properties:
       Subnets: !Ref Subnets
+      SecurityGroups:
+        - !ImportValue 
+          'Fn::Sub': '${NetworkStackName}-ELBSecurityGroupID'
   ALBListener:
     Type: 'AWS::ElasticLoadBalancingV2::Listener'
     Properties:
