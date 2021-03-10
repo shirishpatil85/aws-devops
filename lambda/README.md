@@ -5,13 +5,14 @@ Using AWS SDK
 Demo1: Send an Email When an Object is Added to S3 through Lambda  
 Demo2: Send a Notification through Lambda When a Message is Sent to SQS  
 
-Lambda creation
- - create admin role
- - Code
+Lambda setup
+ - Create admin role
+ - Lambda Code
    - Event handler 
      - SDK provisioning APIs
       - (aws.SES).sendEmail
       - (aws.SNS).publish
 
+Events to trigger lambda
 S3  -> Create Event -> Notification -> Send To Lambda  
 SQS -> Create Trigger for Lambda Function  
