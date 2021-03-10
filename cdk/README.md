@@ -28,6 +28,10 @@ to connect to AWS. You can do this by creating a file named "credentials" at ~/.
 See the [Security Credentials](http://aws.amazon.com/security-credentials) page
 for more information on getting your keys.
 
+## Security Credential
+
+Create user with S3FullAccess Policy and generate access keys for that user for better safety
+
 ## Running the S3 sample
 
 ### Prerequisites
