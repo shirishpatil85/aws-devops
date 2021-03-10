@@ -8,8 +8,8 @@ Demo2: Send a Notification through Lambda When a Message is Sent to SQS
 Lambda creation
  - create admin role
  - Code
-  - Event handler 
-    - SDK provisioning APIs
+   - Event handler 
+     - SDK provisioning APIs
       - (aws.SES).sendEmail
       - (aws.SNS).publish
 
