@@ -21,3 +21,10 @@ https://github.com/awslabs/aws-cloudformation-templates
 ## CDK
 
 https://github.com/aws-samples/aws-cdk-examples
+
+
+## Serverless  
+
+Extension of cloudformation for serverless components eg - Lambda, S3, DymanoDB, SQS, SNS etc  
+
+Samples  : https://github.com/aws/aws-sam-cli-app-templates  
