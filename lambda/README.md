@@ -28,4 +28,4 @@ SAM applications
 -----------------------------------------
 
 SAM is interface to build full fledge applications using lambda.  
-Refer the readme file sam-cli-template folder for details.  
+Refer the readme file in sam-cli-templates folder for details.  
