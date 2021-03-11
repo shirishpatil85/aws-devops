@@ -55,6 +55,6 @@ REST API SAM Deployment
 2> Sam stack only contains s3 bucket policy  
 3> Application stack contains 
    - lambda > function and permission,  
-      iam role,  
-      gateway -> stage, deployment , RestApi    
+   - iam role,  
+   - gateway -> stage, deployment , RestApi    
 
